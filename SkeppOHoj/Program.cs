@@ -15,7 +15,7 @@ namespace SkeppOHoj
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
-
+            //testedit
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
