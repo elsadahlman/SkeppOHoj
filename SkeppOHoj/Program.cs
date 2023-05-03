@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using SkeppOHoj.Data;
 
 namespace SkeppOHoj
 {
@@ -6,6 +9,8 @@ namespace SkeppOHoj
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<SkeppOHojContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SkeppOHojContext") ?? throw new InvalidOperationException("Connection string 'SkeppOHojContext' not found.")));
 
             // Add services to the container.
 
