@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkeppOHoj.Data;
 using SkeppOHoj.Models;
+using SkeppOHoj.Repositories;
 
 namespace SkeppOHoj.Controllers
 {
@@ -14,33 +15,28 @@ namespace SkeppOHoj.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly SkeppOHojContext _context;
+        private readonly SkeppOHojContext _context; //TODO jobba bort
+        private readonly UserRepository _userRepository;
+
 
         public UsersController(SkeppOHojContext context)
         {
             _context = context;
+            _userRepository = new UserRepository(context); // TODO: dependencyInjection
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-          if (_context.User == null)
-          {
-              return NotFound();
-          }
-            return await _context.User.ToListAsync();
+            return await _userRepository.GetUsersAsync();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
-          if (_context.User == null)
-          {
-              return NotFound();
-          }
-            var user = await _context.User.FindAsync(id);
+            var user = await _userRepository.GetUserAsync(id);
 
             if (user == null)
             {
