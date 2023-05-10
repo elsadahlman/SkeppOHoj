@@ -6,7 +6,15 @@ using SkeppOHoj.Models.DTOs;
 
 namespace SkeppOHoj.Repositories
 {
-    public class UserRepository
+    public interface IUserRepository
+    {
+        Task<User> GetUserAsync(int userId);
+        Task<List<User>> GetUsersAsync();
+        Task<User> DeleteUserAsync(int userId);
+        Task<User> AddUserAsync(UserCreationDto dto);
+    }
+
+    public class UserRepository : IUserRepository
     {
 
         private readonly SkeppOHojContext context;
@@ -43,7 +51,7 @@ namespace SkeppOHoj.Repositories
             User user = mapper.Map<User>(dto);
             var addedUser = context.User.Add(user); 
             context.SaveChanges();
-            return addedUser.Entity;    //TODO
+            return addedUser.Entity;    //TODO Lägg till validering, inte flera med samma personnummer 
         }
 
     }

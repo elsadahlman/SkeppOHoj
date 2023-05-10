@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SkeppOHoj.Data;
+using SkeppOHoj.Repositories;
 
 namespace SkeppOHoj
 {
@@ -19,8 +20,10 @@ namespace SkeppOHoj
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(typeof(MapperProfile));
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

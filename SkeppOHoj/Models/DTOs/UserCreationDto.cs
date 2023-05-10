@@ -1,8 +1,13 @@
-﻿namespace SkeppOHoj.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SkeppOHoj.Models.DTOs
 {
     public class UserCreationDto
     {
-        public string? Name { get; set; }
+        [Required]
+        public string Name { get; set; }
+
+        [EmailAddress]
         public string? Email { get; set; }
         public string? PersonalNumber { get; set; }
         public string? Adress { get; set; }

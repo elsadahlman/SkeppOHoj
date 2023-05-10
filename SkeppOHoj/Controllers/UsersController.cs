@@ -18,14 +18,14 @@ namespace SkeppOHoj.Controllers
     public class UsersController : ControllerBase
     {
         private readonly SkeppOHojContext _context; //TODO jobba bort
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper mapper;
 
 
-        public UsersController(SkeppOHojContext context, IMapper mapper)
+        public UsersController(SkeppOHojContext context, IMapper mapper, IUserRepository userRepository)
         {
             _context = context;
-            _userRepository = new UserRepository(context, mapper); // TODO: dependencyInjection
+            _userRepository = userRepository;
             this.mapper = mapper;
         }
 
