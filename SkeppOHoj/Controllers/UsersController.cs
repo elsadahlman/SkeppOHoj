@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkeppOHoj.Data;
 using SkeppOHoj.Models;
+using SkeppOHoj.Models.DTOs;
 using SkeppOHoj.Repositories;
 
 namespace SkeppOHoj.Controllers
@@ -17,12 +19,14 @@ namespace SkeppOHoj.Controllers
     {
         private readonly SkeppOHojContext _context; //TODO jobba bort
         private readonly UserRepository _userRepository;
+        private readonly IMapper mapper;
 
 
-        public UsersController(SkeppOHojContext context)
+        public UsersController(SkeppOHojContext context, IMapper mapper)
         {
             _context = context;
-            _userRepository = new UserRepository(context); // TODO: dependencyInjection
+            _userRepository = new UserRepository(context, mapper); // TODO: dependencyInjection
+            this.mapper = mapper;
         }
 
         // GET: api/Users
@@ -80,16 +84,12 @@ namespace SkeppOHoj.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser(UserCreationDto user)
         {
-          if (_context.User == null)
-          {
-              return Problem("Entity set 'SkeppOHojContext.User'  is null.");
-          }
-            _context.User.Add(user);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+            var output = await _userRepository.AddUserAsync(user);
+
+            return Ok(output);
         }
 
         // DELETE: api/Users/5
