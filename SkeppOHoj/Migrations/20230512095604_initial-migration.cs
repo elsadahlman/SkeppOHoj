@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SkeppOHoj.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initialmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,9 +15,9 @@ namespace SkeppOHoj.Migrations
                 name: "InsuranceClaim",
                 columns: table => new
                 {
-                    InsuranceClaimId = table.Column<long>(type: "bigint", nullable: false)
+                    InsuranceClaimId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StatusId = table.Column<long>(type: "bigint", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Amount = table.Column<double>(type: "float", nullable: false)
@@ -31,9 +31,9 @@ namespace SkeppOHoj.Migrations
                 name: "InsuranceClaimComment",
                 columns: table => new
                 {
-                    InsuranceClaimCommentId = table.Column<long>(type: "bigint", nullable: false)
+                    InsuranceClaimCommentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InsuranceClaimId = table.Column<long>(type: "bigint", nullable: false),
+                    InsuranceClaimId = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -46,7 +46,7 @@ namespace SkeppOHoj.Migrations
                 name: "InsuranceType",
                 columns: table => new
                 {
-                    InsuranceTypeId = table.Column<long>(type: "bigint", nullable: false)
+                    InsuranceTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -59,7 +59,7 @@ namespace SkeppOHoj.Migrations
                 name: "Status",
                 columns: table => new
                 {
-                    StatusID = table.Column<long>(type: "bigint", nullable: false)
+                    StatusID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CurrentStatus = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -92,7 +92,7 @@ namespace SkeppOHoj.Migrations
                 {
                     InsuranceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InsuranceTypeId = table.Column<long>(type: "bigint", nullable: false),
+                    InsuranceTypeId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),

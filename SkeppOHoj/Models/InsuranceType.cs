@@ -2,7 +2,7 @@
 {
     public class InsuranceType
     {
-        public long InsuranceTypeId { get; set; }
+        public int InsuranceTypeId { get; set; }
         public string? Type { get; set; }
 
     }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkeppOHoj.Data;
 using SkeppOHoj.Models;
+using SkeppOHoj.Models.DTOs;
+using SkeppOHoj.Repositories;
 
 namespace SkeppOHoj.Controllers
 {
@@ -15,45 +17,40 @@ namespace SkeppOHoj.Controllers
     public class InsurancesController : ControllerBase
     {
         private readonly SkeppOHojContext _context;
+        private readonly IInsuranceRepository _insuranceRepository;
 
-        public InsurancesController(SkeppOHojContext context)
+        public InsurancesController(SkeppOHojContext context, IInsuranceRepository insuranceRepository)
         {
             _context = context;
+            _insuranceRepository = insuranceRepository;
         }
 
         // GET: api/Insurances
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Insurance>>> GetInsurance()
         {
-          if (_context.Insurance == null)
-          {
-              return NotFound();
-          }
-            return await _context.Insurance.ToListAsync();
+            var insurances = await _insuranceRepository.GetInsurancesAsync();
+            return Ok(insurances);
         }
 
         // GET: api/Insurances/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Insurance>> GetInsurance(long id)
+        public async Task<ActionResult<Insurance>> GetInsurance(int id)
         {
-          if (_context.Insurance == null)
-          {
-              return NotFound();
-          }
-            var insurance = await _context.Insurance.FindAsync(id);
+            var insurance = await _insuranceRepository.GetInsuranceAsync(id);
 
             if (insurance == null)
             {
                 return NotFound();
             }
 
-            return insurance;
+            return Ok(insurance);
         }
 
         // PUT: api/Insurances/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInsurance(long id, Insurance insurance)
+        public async Task<IActionResult> PutInsurance(int id, Insurance insurance)
         {
             if (id != insurance.InsuranceId)
             {
@@ -84,21 +81,19 @@ namespace SkeppOHoj.Controllers
         // POST: api/Insurances
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Insurance>> PostInsurance(Insurance insurance)
+        public async Task<ActionResult<Insurance>> PostInsurance(InsuranceCreationDto insuranceDto)
         {
-          if (_context.Insurance == null)
-          {
-              return Problem("Entity set 'SkeppOHojContext.Insurance'  is null.");
-          }
-            _context.Insurance.Add(insurance);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetInsurance", new { id = insurance.InsuranceId }, insurance);
+            var insurance = await _insuranceRepository.AddInsuranceAsync(insuranceDto);
+            if (insurance == null)
+            { return BadRequest(); }
+
+            return Ok(insurance);
         }
 
         // DELETE: api/Insurances/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInsurance(long id)
+        public async Task<IActionResult> DeleteInsurance(int id)
         {
             if (_context.Insurance == null)
             {
@@ -116,7 +111,7 @@ namespace SkeppOHoj.Controllers
             return NoContent();
         }
 
-        private bool InsuranceExists(long id)
+        private bool InsuranceExists(int id)
         {
             return (_context.Insurance?.Any(e => e.InsuranceId == id)).GetValueOrDefault();
         }

@@ -2,7 +2,7 @@
 {
     public class Status
     {
-        public long StatusID { get; set; }
+        public int StatusID { get; set; }
         public string? CurrentStatus { get; set; }
     }
 }

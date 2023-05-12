@@ -12,8 +12,8 @@ using SkeppOHoj.Data;
 namespace SkeppOHoj.Migrations
 {
     [DbContext(typeof(SkeppOHojContext))]
-    [Migration("20230503133459_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230512095604_initial-migration")]
+    partial class initialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,8 +36,8 @@ namespace SkeppOHoj.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("InsuranceTypeId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("InsuranceTypeId")
+                        .HasColumnType("int");
 
                     b.Property<double>("Premium")
                         .HasColumnType("float");
@@ -57,11 +57,11 @@ namespace SkeppOHoj.Migrations
 
             modelBuilder.Entity("SkeppOHoj.Models.InsuranceClaim", b =>
                 {
-                    b.Property<long>("InsuranceClaimId")
+                    b.Property<int>("InsuranceClaimId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("InsuranceClaimId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InsuranceClaimId"));
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
@@ -72,8 +72,8 @@ namespace SkeppOHoj.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("StatusId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
 
                     b.HasKey("InsuranceClaimId");
 
@@ -82,11 +82,11 @@ namespace SkeppOHoj.Migrations
 
             modelBuilder.Entity("SkeppOHoj.Models.InsuranceClaimComment", b =>
                 {
-                    b.Property<long>("InsuranceClaimCommentId")
+                    b.Property<int>("InsuranceClaimCommentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("InsuranceClaimCommentId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InsuranceClaimCommentId"));
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
@@ -94,8 +94,8 @@ namespace SkeppOHoj.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("InsuranceClaimId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("InsuranceClaimId")
+                        .HasColumnType("int");
 
                     b.HasKey("InsuranceClaimCommentId");
 
@@ -104,11 +104,11 @@ namespace SkeppOHoj.Migrations
 
             modelBuilder.Entity("SkeppOHoj.Models.InsuranceType", b =>
                 {
-                    b.Property<long>("InsuranceTypeId")
+                    b.Property<int>("InsuranceTypeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("InsuranceTypeId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InsuranceTypeId"));
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
@@ -120,11 +120,11 @@ namespace SkeppOHoj.Migrations
 
             modelBuilder.Entity("SkeppOHoj.Models.Status", b =>
                 {
-                    b.Property<long>("StatusID")
+                    b.Property<int>("StatusID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("StatusID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusID"));
 
                     b.Property<string>("CurrentStatus")
                         .HasColumnType("nvarchar(max)");

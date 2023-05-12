@@ -34,7 +34,7 @@ namespace SkeppOHoj.Controllers
 
         // GET: api/Status/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Status>> GetStatus(long id)
+        public async Task<ActionResult<Status>> GetStatus(int id)
         {
           if (_context.Status == null)
           {
@@ -53,7 +53,7 @@ namespace SkeppOHoj.Controllers
         // PUT: api/Status/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStatus(long id, Status status)
+        public async Task<IActionResult> PutStatus(int id, Status status)
         {
             if (id != status.StatusID)
             {
@@ -98,7 +98,7 @@ namespace SkeppOHoj.Controllers
 
         // DELETE: api/Status/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStatus(long id)
+        public async Task<IActionResult> DeleteStatus(int id)
         {
             if (_context.Status == null)
             {
@@ -116,7 +116,7 @@ namespace SkeppOHoj.Controllers
             return NoContent();
         }
 
-        private bool StatusExists(long id)
+        private bool StatusExists(int id)
         {
             return (_context.Status?.Any(e => e.StatusID == id)).GetValueOrDefault();
         }

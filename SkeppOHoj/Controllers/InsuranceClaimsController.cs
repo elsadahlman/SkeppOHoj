@@ -34,7 +34,7 @@ namespace SkeppOHoj.Controllers
 
         // GET: api/InsuranceClaims/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<InsuranceClaim>> GetInsuranceClaim(long id)
+        public async Task<ActionResult<InsuranceClaim>> GetInsuranceClaim(int id)
         {
           if (_context.InsuranceClaim == null)
           {
@@ -53,7 +53,7 @@ namespace SkeppOHoj.Controllers
         // PUT: api/InsuranceClaims/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInsuranceClaim(long id, InsuranceClaim insuranceClaim)
+        public async Task<IActionResult> PutInsuranceClaim(int id, InsuranceClaim insuranceClaim)
         {
             if (id != insuranceClaim.InsuranceClaimId)
             {
@@ -98,7 +98,7 @@ namespace SkeppOHoj.Controllers
 
         // DELETE: api/InsuranceClaims/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInsuranceClaim(long id)
+        public async Task<IActionResult> DeleteInsuranceClaim(int id)
         {
             if (_context.InsuranceClaim == null)
             {
@@ -116,7 +116,7 @@ namespace SkeppOHoj.Controllers
             return NoContent();
         }
 
-        private bool InsuranceClaimExists(long id)
+        private bool InsuranceClaimExists(int id)
         {
             return (_context.InsuranceClaim?.Any(e => e.InsuranceClaimId == id)).GetValueOrDefault();
         }
