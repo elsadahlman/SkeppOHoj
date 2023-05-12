@@ -90,9 +90,5 @@ namespace SkeppOHoj.Controllers
             return Ok(user);
         }
 
-        private bool UserExists(int id)
-        {
-            return (_context.User?.Any(e => e.UserId == id)).GetValueOrDefault();
-        }
     }
 }
