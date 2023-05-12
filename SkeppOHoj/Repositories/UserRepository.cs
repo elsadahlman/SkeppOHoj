@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using SkeppOHoj.Data;
 using SkeppOHoj.Models;
 using SkeppOHoj.Models.DTOs;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.ComponentModel.Design;
+using System.Threading.Tasks;
 
 namespace SkeppOHoj.Repositories
 {
@@ -12,6 +15,8 @@ namespace SkeppOHoj.Repositories
         Task<List<User>> GetUsersAsync();
         Task<User> DeleteUserAsync(int userId);
         Task<User> AddUserAsync(UserCreationDto dto);
+        Task<User> PutUserAsync(int id, UserCreationDto userDto);
+        //Task<User> PatchUserAsync(int id, UserCreationDto userDto);
     }
 
     public class UserRepository : IUserRepository
@@ -41,9 +46,15 @@ namespace SkeppOHoj.Repositories
         public async Task<User> DeleteUserAsync(int userId)
         {
             var user = await context.User.FirstOrDefaultAsync(x => x.UserId == userId);
+
+            if (user == null)
+            {
+                return null;
+            }
+
             context.User.Remove(user);
             context.SaveChanges();
-            return user;    //TODO
+            return user;
         }
 
         public async Task<User> AddUserAsync(UserCreationDto dto)
@@ -52,6 +63,20 @@ namespace SkeppOHoj.Repositories
             var addedUser = context.User.Add(user); 
             context.SaveChanges();
             return addedUser.Entity;    //TODO Lägg till validering, inte flera med samma personnummer 
+        }
+
+        public async Task<User> PutUserAsync(int id, UserCreationDto userDto)
+        {
+            var user = await context.User.FirstOrDefaultAsync(x => x.UserId == id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            user = mapper.Map<UserCreationDto, User>(userDto, user);
+            context.SaveChanges();
+
+            return user;
         }
 
     }

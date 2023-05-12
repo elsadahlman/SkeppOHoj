@@ -8,7 +8,9 @@ namespace SkeppOHoj
     {
         public MapperProfile()
         {
-            CreateMap<UserCreationDto, User>();
+            CreateMap<UserCreationDto, User>().ForAllMembers(
+                opts 
+                    => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }
