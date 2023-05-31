@@ -15,6 +15,10 @@ namespace SkeppOHoj
             CreateMap<InsuranceCreationDto, Insurance>().ForAllMembers(
                 opts
                     => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<InsuranceUpdateDto, Insurance>().ForAllMembers(
+                opts
+                    => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

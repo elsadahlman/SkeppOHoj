@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using SkeppOHoj.Data;
 using SkeppOHoj.Models;
 using SkeppOHoj.Models.DTOs;
@@ -50,32 +51,16 @@ namespace SkeppOHoj.Controllers
         // PUT: api/Insurances/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInsurance(int id, Insurance insurance)
+        public async Task<IActionResult> PutInsurance(int id, InsuranceUpdateDto insuranceDto)
         {
-            if (id != insurance.InsuranceId)
+            var insurance = await _insuranceRepository.PutInsuranceAsync(id, insuranceDto);
+            if (insurance == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(insurance).State = EntityState.Modified;
+            return Ok(insurance);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!InsuranceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/Insurances
@@ -95,25 +80,26 @@ namespace SkeppOHoj.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInsurance(int id)
         {
-            if (_context.Insurance == null)
-            {
-                return NotFound();
-            }
-            var insurance = await _context.Insurance.FindAsync(id);
+
+            var insurance = await _insuranceRepository.DeleteInsuranceAsync(id);
             if (insurance == null)
             {
                 return NotFound();
             }
 
-            _context.Insurance.Remove(insurance);
-            await _context.SaveChangesAsync();
+            return Ok(insurance);
 
-            return NoContent();
         }
 
-        private bool InsuranceExists(int id)
+        private async Task<bool> InsuranceExists(int id)
         {
-            return (_context.Insurance?.Any(e => e.InsuranceId == id)).GetValueOrDefault();
+            var insurance = await _insuranceRepository.GetInsuranceAsync(id);
+            if (insurance != null)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

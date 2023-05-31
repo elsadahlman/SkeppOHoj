@@ -15,7 +15,7 @@ namespace SkeppOHoj.Repositories
         Task<List<Insurance>> GetInsurancesAsync();
         Task<Insurance> DeleteInsuranceAsync(int insuranceId);
         Task<Insurance> AddInsuranceAsync(InsuranceCreationDto dto);
-        Task<Insurance> PutInsuranceAsync(int id, InsuranceCreationDto insuranceDto);
+        Task<Insurance> PutInsuranceAsync(int id, InsuranceUpdateDto insuranceDto);
     }
 
     public class InsuranceRepository : IInsuranceRepository
@@ -64,7 +64,7 @@ namespace SkeppOHoj.Repositories
             return addedInsurance.Entity;
         }
 
-        public async Task<Insurance> PutInsuranceAsync(int id, InsuranceCreationDto insuranceDto)
+        public async Task<Insurance> PutInsuranceAsync(int id, InsuranceUpdateDto insuranceDto)
         {
             var insurance = await context.Insurance.FirstOrDefaultAsync(x => x.InsuranceId == id);
             if (insurance == null)
@@ -72,7 +72,7 @@ namespace SkeppOHoj.Repositories
                 return null;
             }
 
-            insurance = mapper.Map<InsuranceCreationDto, Insurance>(insuranceDto, insurance);
+            insurance = mapper.Map<InsuranceUpdateDto, Insurance>(insuranceDto, insurance);
             context.SaveChanges();
 
             return insurance;
