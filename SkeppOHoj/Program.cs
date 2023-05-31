@@ -22,6 +22,7 @@ namespace SkeppOHoj
             builder.Services.AddAutoMapper(typeof(MapperProfile));
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IInsuranceRepository, InsuranceRepository>();
+            builder.Services.AddScoped<IInsuranceClaimCommentRepository, InsuranceClaimCommentRepository>();
 
             var app = builder.Build();
 

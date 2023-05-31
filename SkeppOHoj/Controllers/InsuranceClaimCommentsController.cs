@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkeppOHoj.Data;
 using SkeppOHoj.Models;
+using SkeppOHoj.Repositories;
 
 namespace SkeppOHoj.Controllers
 {
@@ -15,110 +16,53 @@ namespace SkeppOHoj.Controllers
     public class InsuranceClaimCommentsController : ControllerBase
     {
         private readonly SkeppOHojContext _context;
+        private readonly IInsuranceClaimCommentRepository _insuranceClaimCommentRepository;
 
-        public InsuranceClaimCommentsController(SkeppOHojContext context)
+        public InsuranceClaimCommentsController(SkeppOHojContext context, IInsuranceClaimCommentRepository insuranceClaimCommentRepository)
         {
             _context = context;
+            _insuranceClaimCommentRepository = insuranceClaimCommentRepository;
         }
 
         // GET: api/InsuranceClaimComments
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InsuranceClaimComment>>> GetInsuranceClaimComment()
         {
-          if (_context.InsuranceClaimComment == null)
-          {
-              return NotFound();
-          }
-            return await _context.InsuranceClaimComment.ToListAsync();
+            var comments = await _insuranceClaimCommentRepository.GetInsuranceClaimCommentsAsync();
+            return Ok(comments);
+
         }
 
         // GET: api/InsuranceClaimComments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<InsuranceClaimComment>> GetInsuranceClaimComment(int id)
         {
-          if (_context.InsuranceClaimComment == null)
-          {
-              return NotFound();
-          }
-            var insuranceClaimComment = await _context.InsuranceClaimComment.FindAsync(id);
+            var comment = await _insuranceClaimCommentRepository.GetInsuranceClaimCommentAsync(id);
 
-            if (insuranceClaimComment == null)
+            if (comment == null)
             {
                 return NotFound();
             }
 
-            return insuranceClaimComment;
+            return Ok(comment);
         }
 
-        // PUT: api/InsuranceClaimComments/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutInsuranceClaimComment(int id, InsuranceClaimComment insuranceClaimComment)
-        {
-            if (id != insuranceClaimComment.InsuranceClaimCommentId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(insuranceClaimComment).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!InsuranceClaimCommentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        
 
         // POST: api/InsuranceClaimComments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<InsuranceClaimComment>> PostInsuranceClaimComment(InsuranceClaimComment insuranceClaimComment)
+        public async Task<ActionResult<InsuranceClaimComment>> PostInsuranceClaimComment(InsuranceClaimCommentCreationDto dto)
         {
-          if (_context.InsuranceClaimComment == null)
-          {
-              return Problem("Entity set 'SkeppOHojContext.InsuranceClaimComment'  is null.");
-          }
-            _context.InsuranceClaimComment.Add(insuranceClaimComment);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetInsuranceClaimComment", new { id = insuranceClaimComment.InsuranceClaimCommentId }, insuranceClaimComment);
-        }
-
-        // DELETE: api/InsuranceClaimComments/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInsuranceClaimComment(int id)
-        {
-            if (_context.InsuranceClaimComment == null)
+            var comment = await _insuranceClaimCommentRepository.AddInsuranceClaimCommentAsync(dto);
+            if (comment == null)
             {
-                return NotFound();
-            }
-            var insuranceClaimComment = await _context.InsuranceClaimComment.FindAsync(id);
-            if (insuranceClaimComment == null)
-            {
-                return NotFound();
+                return BadRequest();
             }
 
-            _context.InsuranceClaimComment.Remove(insuranceClaimComment);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(comment);
         }
 
-        private bool InsuranceClaimCommentExists(int id)
-        {
-            return (_context.InsuranceClaimComment?.Any(e => e.InsuranceClaimCommentId == id)).GetValueOrDefault();
-        }
+     
     }
 }
