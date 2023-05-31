@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SkeppOHoj.Models
 {
+#nullable disable
     [Table("Insurances")]
     public class Insurance
     {
@@ -13,10 +14,7 @@ namespace SkeppOHoj.Models
         public int InsuranceTypeId { get; set; }
 
         public int UserId { get; set; }
-
-        [ForeignKey("UserId")]
-        [InverseProperty("Insurances")]
-        public virtual User? User { get; set; }
+        public User User { get; set; }
 
         public DateTime StartDate { get; set; }
         

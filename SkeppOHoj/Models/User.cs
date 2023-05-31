@@ -14,7 +14,6 @@ namespace SkeppOHoj.Models
         public string? PhoneNumber { get; set; }
         public string? Password { get; set;}
 
-        [InverseProperty("User")]
-        public virtual ICollection<Insurance> Insurances { get; } = new List<Insurance>();
+        public ICollection<Insurance> Insurances { get; set; }
     }
 }

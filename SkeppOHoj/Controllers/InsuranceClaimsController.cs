@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkeppOHoj.Data;
 using SkeppOHoj.Models;
+using SkeppOHoj.Repositories;
 
 namespace SkeppOHoj.Controllers
 {
@@ -15,110 +16,53 @@ namespace SkeppOHoj.Controllers
     public class InsuranceClaimsController : ControllerBase
     {
         private readonly SkeppOHojContext _context;
+        private readonly IInsuranceClaimRepository _insuranceClaimRepository;
 
-        public InsuranceClaimsController(SkeppOHojContext context)
+        public InsuranceClaimsController(SkeppOHojContext context, IInsuranceClaimRepository insuranceClaimRepository)
         {
             _context = context;
+            _insuranceClaimRepository = insuranceClaimRepository;
         }
 
         // GET: api/InsuranceClaims
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InsuranceClaim>>> GetInsuranceClaim()
         {
-          if (_context.InsuranceClaim == null)
-          {
-              return NotFound();
-          }
-            return await _context.InsuranceClaim.ToListAsync();
+            var claims = await _insuranceClaimRepository.GetInsuranceClaimsAsync();
+            return Ok(claims);
+
         }
 
         // GET: api/InsuranceClaims/5
         [HttpGet("{id}")]
         public async Task<ActionResult<InsuranceClaim>> GetInsuranceClaim(int id)
         {
-          if (_context.InsuranceClaim == null)
-          {
-              return NotFound();
-          }
-            var insuranceClaim = await _context.InsuranceClaim.FindAsync(id);
+            var claim = await _insuranceClaimRepository.GetInsuranceClaimAsync(id);
 
-            if (insuranceClaim == null)
+            if (claim == null)
             {
                 return NotFound();
             }
 
-            return insuranceClaim;
+            return Ok(claim);
         }
 
-        // PUT: api/InsuranceClaims/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutInsuranceClaim(int id, InsuranceClaim insuranceClaim)
-        {
-            if (id != insuranceClaim.InsuranceClaimId)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(insuranceClaim).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!InsuranceClaimExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/InsuranceClaims
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<InsuranceClaim>> PostInsuranceClaim(InsuranceClaim insuranceClaim)
+        public async Task<ActionResult<InsuranceClaim>> PostInsuranceClaim(InsuranceClaimCreationDto dto)
         {
-          if (_context.InsuranceClaim == null)
-          {
-              return Problem("Entity set 'SkeppOHojContext.InsuranceClaim'  is null.");
-          }
-            _context.InsuranceClaim.Add(insuranceClaim);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetInsuranceClaim", new { id = insuranceClaim.InsuranceClaimId }, insuranceClaim);
-        }
-
-        // DELETE: api/InsuranceClaims/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInsuranceClaim(int id)
-        {
-            if (_context.InsuranceClaim == null)
+            var claim = await _insuranceClaimRepository.AddInsuranceClaimAsync(dto);
+            if (claim == null)
             {
-                return NotFound();
-            }
-            var insuranceClaim = await _context.InsuranceClaim.FindAsync(id);
-            if (insuranceClaim == null)
-            {
-                return NotFound();
+                return BadRequest();
             }
 
-            _context.InsuranceClaim.Remove(insuranceClaim);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(claim);
         }
 
-        private bool InsuranceClaimExists(int id)
-        {
-            return (_context.InsuranceClaim?.Any(e => e.InsuranceClaimId == id)).GetValueOrDefault();
-        }
+
     }
 }

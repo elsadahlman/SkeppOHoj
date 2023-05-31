@@ -23,6 +23,10 @@ namespace SkeppOHoj
             CreateMap<InsuranceClaimCommentCreationDto, InsuranceClaimComment>().ForAllMembers(
                 opts
                     => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<InsuranceClaimCreationDto, InsuranceClaim>().ForAllMembers(
+                opts
+                    => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }
