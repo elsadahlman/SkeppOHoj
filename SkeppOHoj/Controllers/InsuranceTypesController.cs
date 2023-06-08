@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkeppOHoj.Data;
 using SkeppOHoj.Models;
+using SkeppOHoj.Models.DTOs;
+using SkeppOHoj.Repositories;
 
 namespace SkeppOHoj.Controllers
 {
@@ -15,110 +17,63 @@ namespace SkeppOHoj.Controllers
     public class InsuranceTypesController : ControllerBase
     {
         private readonly SkeppOHojContext _context;
+        private readonly IInsuranceTypeRepository _insuranceTypeRepository;
 
-        public InsuranceTypesController(SkeppOHojContext context)
+        public InsuranceTypesController(SkeppOHojContext context, IInsuranceTypeRepository insuranceTypeRepository )
         {
             _context = context;
+            _insuranceTypeRepository = insuranceTypeRepository;
         }
 
         // GET: api/InsuranceTypes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InsuranceType>>> GetInsuranceType()
         {
-          if (_context.InsuranceType == null)
-          {
-              return NotFound();
-          }
-            return await _context.InsuranceType.ToListAsync();
+            var insurancesTypes = await _insuranceTypeRepository.GetInsuranceTypesAsync();
+            return Ok(insurancesTypes);
+
         }
 
         // GET: api/InsuranceTypes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<InsuranceType>> GetInsuranceType(int id)
         {
-          if (_context.InsuranceType == null)
-          {
-              return NotFound();
-          }
-            var insuranceType = await _context.InsuranceType.FindAsync(id);
+            var insuranceType = await _insuranceTypeRepository.GetInsuranceTypeAsync(id);
 
             if (insuranceType == null)
             {
                 return NotFound();
             }
 
-            return insuranceType;
+            return Ok(insuranceType);
         }
 
-        // PUT: api/InsuranceTypes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutInsuranceType(int id, InsuranceType insuranceType)
-        {
-            if (id != insuranceType.InsuranceTypeId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(insuranceType).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!InsuranceTypeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/InsuranceTypes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<InsuranceType>> PostInsuranceType(InsuranceType insuranceType)
+        public async Task<ActionResult<InsuranceType>> PostInsuranceType(InsuranceTypeCreationDto insuranceTypeCreationDto)
         {
-          if (_context.InsuranceType == null)
-          {
-              return Problem("Entity set 'SkeppOHojContext.InsuranceType'  is null.");
-          }
-            _context.InsuranceType.Add(insuranceType);
-            await _context.SaveChangesAsync();
+            var insuranceType = await _insuranceTypeRepository.AddInsuranceTypeAsync(insuranceTypeCreationDto);
+            if (insuranceType == null)
+            { return BadRequest(); }
 
-            return CreatedAtAction("GetInsuranceType", new { id = insuranceType.InsuranceTypeId }, insuranceType);
+            return Ok(insuranceType);
         }
 
         // DELETE: api/InsuranceTypes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInsuranceType(int id)
         {
-            if (_context.InsuranceType == null)
-            {
-                return NotFound();
-            }
-            var insuranceType = await _context.InsuranceType.FindAsync(id);
+
+            var insuranceType = await _insuranceTypeRepository.DeleteInsuranceTypeAsync(id);
             if (insuranceType == null)
             {
                 return NotFound();
             }
 
-            _context.InsuranceType.Remove(insuranceType);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(insuranceType);
         }
 
-        private bool InsuranceTypeExists(int id)
-        {
-            return (_context.InsuranceType?.Any(e => e.InsuranceTypeId == id)).GetValueOrDefault();
-        }
     }
 }

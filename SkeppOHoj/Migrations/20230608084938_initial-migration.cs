@@ -12,37 +12,6 @@ namespace SkeppOHoj.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "InsuranceClaim",
-                columns: table => new
-                {
-                    InsuranceClaimId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClaimStatusId = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Amount = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InsuranceClaim", x => x.InsuranceClaimId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InsuranceClaimComment",
-                columns: table => new
-                {
-                    InsuranceClaimCommentId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    InsuranceClaimId = table.Column<int>(type: "int", nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InsuranceClaimComment", x => x.InsuranceClaimCommentId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "InsuranceType",
                 columns: table => new
                 {
@@ -102,12 +71,77 @@ namespace SkeppOHoj.Migrations
                 {
                     table.PrimaryKey("PK_Insurances", x => x.InsuranceId);
                     table.ForeignKey(
+                        name: "FK_Insurances_InsuranceType_InsuranceTypeId",
+                        column: x => x.InsuranceTypeId,
+                        principalTable: "InsuranceType",
+                        principalColumn: "InsuranceTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Insurances_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "InsuranceClaim",
+                columns: table => new
+                {
+                    InsuranceClaimId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InsuranceId = table.Column<int>(type: "int", nullable: false),
+                    ClaimStatusId = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InsuranceClaim", x => x.InsuranceClaimId);
+                    table.ForeignKey(
+                        name: "FK_InsuranceClaim_Insurances_InsuranceId",
+                        column: x => x.InsuranceId,
+                        principalTable: "Insurances",
+                        principalColumn: "InsuranceId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InsuranceClaimComment",
+                columns: table => new
+                {
+                    InsuranceClaimCommentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InsuranceClaimId = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InsuranceClaimComment", x => x.InsuranceClaimCommentId);
+                    table.ForeignKey(
+                        name: "FK_InsuranceClaimComment_InsuranceClaim_InsuranceClaimId",
+                        column: x => x.InsuranceClaimId,
+                        principalTable: "InsuranceClaim",
+                        principalColumn: "InsuranceClaimId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InsuranceClaim_InsuranceId",
+                table: "InsuranceClaim",
+                column: "InsuranceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InsuranceClaimComment_InsuranceClaimId",
+                table: "InsuranceClaimComment",
+                column: "InsuranceClaimId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Insurances_InsuranceTypeId",
+                table: "Insurances",
+                column: "InsuranceTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Insurances_UserId",
@@ -119,19 +153,19 @@ namespace SkeppOHoj.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "InsuranceClaim");
+                name: "InsuranceClaimComment");
 
             migrationBuilder.DropTable(
-                name: "InsuranceClaimComment");
+                name: "Status");
+
+            migrationBuilder.DropTable(
+                name: "InsuranceClaim");
 
             migrationBuilder.DropTable(
                 name: "Insurances");
 
             migrationBuilder.DropTable(
                 name: "InsuranceType");
-
-            migrationBuilder.DropTable(
-                name: "Status");
 
             migrationBuilder.DropTable(
                 name: "User");

@@ -22,6 +22,22 @@ namespace SkeppOHoj.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("SkeppOHoj.Models.ClaimStatus", b =>
+                {
+                    b.Property<int>("ClaimStatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClaimStatusId"));
+
+                    b.Property<string>("CurrentStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ClaimStatusId");
+
+                    b.ToTable("Status");
+                });
+
             modelBuilder.Entity("SkeppOHoj.Models.Insurance", b =>
                 {
                     b.Property<int>("InsuranceId")
@@ -47,6 +63,8 @@ namespace SkeppOHoj.Migrations
 
                     b.HasKey("InsuranceId");
 
+                    b.HasIndex("InsuranceTypeId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Insurances");
@@ -63,16 +81,21 @@ namespace SkeppOHoj.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
+                    b.Property<int>("ClaimStatusId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ClaimStatusId")
+                    b.Property<int>("InsuranceId")
                         .HasColumnType("int");
 
                     b.HasKey("InsuranceClaimId");
+
+                    b.HasIndex("InsuranceId");
 
                     b.ToTable("InsuranceClaim");
                 });
@@ -96,6 +119,8 @@ namespace SkeppOHoj.Migrations
 
                     b.HasKey("InsuranceClaimCommentId");
 
+                    b.HasIndex("InsuranceClaimId");
+
                     b.ToTable("InsuranceClaimComment");
                 });
 
@@ -113,22 +138,6 @@ namespace SkeppOHoj.Migrations
                     b.HasKey("InsuranceTypeId");
 
                     b.ToTable("InsuranceType");
-                });
-
-            modelBuilder.Entity("SkeppOHoj.Models.Status", b =>
-                {
-                    b.Property<int>("ClaimStatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClaimStatusId"));
-
-                    b.Property<string>("CurrentStatus")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ClaimStatusId");
-
-                    b.ToTable("Status");
                 });
 
             modelBuilder.Entity("SkeppOHoj.Models.User", b =>
@@ -164,13 +173,43 @@ namespace SkeppOHoj.Migrations
 
             modelBuilder.Entity("SkeppOHoj.Models.Insurance", b =>
                 {
+                    b.HasOne("SkeppOHoj.Models.InsuranceType", "InsuranceType")
+                        .WithMany()
+                        .HasForeignKey("InsuranceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SkeppOHoj.Models.User", "User")
                         .WithMany("Insurances")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("InsuranceType");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SkeppOHoj.Models.InsuranceClaim", b =>
+                {
+                    b.HasOne("SkeppOHoj.Models.Insurance", "Insurance")
+                        .WithMany()
+                        .HasForeignKey("InsuranceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Insurance");
+                });
+
+            modelBuilder.Entity("SkeppOHoj.Models.InsuranceClaimComment", b =>
+                {
+                    b.HasOne("SkeppOHoj.Models.InsuranceClaim", "InsuranceClaim")
+                        .WithMany()
+                        .HasForeignKey("InsuranceClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InsuranceClaim");
                 });
 
             modelBuilder.Entity("SkeppOHoj.Models.User", b =>

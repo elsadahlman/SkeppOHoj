@@ -24,6 +24,7 @@ namespace SkeppOHoj
             builder.Services.AddScoped<IInsuranceRepository, InsuranceRepository>();
             builder.Services.AddScoped<IInsuranceClaimCommentRepository, InsuranceClaimCommentRepository>();
             builder.Services.AddScoped<IInsuranceClaimRepository, InsuranceClaimRepository>();
+            builder.Services.AddScoped<IInsuranceTypeRepository, InsuranceTypeRepository>();
 
             var app = builder.Build();
 
