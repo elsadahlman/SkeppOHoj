@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkeppOHoj.Data;
 
@@ -11,9 +12,11 @@ using SkeppOHoj.Data;
 namespace SkeppOHoj.Migrations
 {
     [DbContext(typeof(SkeppOHojContext))]
-    partial class SkeppOHojContextModelSnapshot : ModelSnapshot
+    [Migration("20230608125528_claimstatus")]
+    partial class claimstatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
