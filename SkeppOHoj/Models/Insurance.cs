@@ -8,11 +8,11 @@ namespace SkeppOHoj.Models
     [Table("Insurances")]
     public class Insurance
     {
-        [Key]
+
         public int InsuranceId { get; set; }
 
         public int InsuranceTypeId { get; set; }
-
+        public InsuranceType InsuranceType { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
 

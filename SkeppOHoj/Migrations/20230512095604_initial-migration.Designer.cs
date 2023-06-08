@@ -72,7 +72,7 @@ namespace SkeppOHoj.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int>("ClaimStatusId")
                         .HasColumnType("int");
 
                     b.HasKey("InsuranceClaimId");
@@ -120,16 +120,16 @@ namespace SkeppOHoj.Migrations
 
             modelBuilder.Entity("SkeppOHoj.Models.Status", b =>
                 {
-                    b.Property<int>("StatusID")
+                    b.Property<int>("ClaimStatusId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClaimStatusId"));
 
                     b.Property<string>("CurrentStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("StatusID");
+                    b.HasKey("ClaimStatusId");
 
                     b.ToTable("Status");
                 });

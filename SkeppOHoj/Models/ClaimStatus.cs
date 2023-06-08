@@ -1,8 +1,8 @@
 ﻿namespace SkeppOHoj.Models
 {
-    public class Status
+    public class ClaimStatus
     {
-        public int StatusID { get; set; }
+        public int ClaimStatusId { get; set; }
         public string? CurrentStatus { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace SkeppOHoj.Controllers
 
         // GET: api/Status
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Status>>> GetStatus()
+        public async Task<ActionResult<IEnumerable<ClaimStatus>>> GetStatus()
         {
           if (_context.Status == null)
           {
@@ -34,7 +34,7 @@ namespace SkeppOHoj.Controllers
 
         // GET: api/Status/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Status>> GetStatus(int id)
+        public async Task<ActionResult<ClaimStatus>> GetStatus(int id)
         {
           if (_context.Status == null)
           {
@@ -53,9 +53,9 @@ namespace SkeppOHoj.Controllers
         // PUT: api/Status/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStatus(int id, Status status)
+        public async Task<IActionResult> PutStatus(int id, ClaimStatus status)
         {
-            if (id != status.StatusID)
+            if (id != status.ClaimStatusId)
             {
                 return BadRequest();
             }
@@ -84,7 +84,7 @@ namespace SkeppOHoj.Controllers
         // POST: api/Status
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Status>> PostStatus(Status status)
+        public async Task<ActionResult<ClaimStatus>> PostStatus(ClaimStatus status)
         {
           if (_context.Status == null)
           {
@@ -93,7 +93,7 @@ namespace SkeppOHoj.Controllers
             _context.Status.Add(status);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetStatus", new { id = status.StatusID }, status);
+            return CreatedAtAction("GetStatus", new { id = status.ClaimStatusId }, status);
         }
 
         // DELETE: api/Status/5
@@ -118,7 +118,7 @@ namespace SkeppOHoj.Controllers
 
         private bool StatusExists(int id)
         {
-            return (_context.Status?.Any(e => e.StatusID == id)).GetValueOrDefault();
+            return (_context.Status?.Any(e => e.ClaimStatusId == id)).GetValueOrDefault();
         }
     }
 }

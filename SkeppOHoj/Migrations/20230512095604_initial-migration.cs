@@ -17,7 +17,7 @@ namespace SkeppOHoj.Migrations
                 {
                     InsuranceClaimId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    ClaimStatusId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Amount = table.Column<double>(type: "float", nullable: false)
@@ -59,13 +59,13 @@ namespace SkeppOHoj.Migrations
                 name: "Status",
                 columns: table => new
                 {
-                    StatusID = table.Column<int>(type: "int", nullable: false)
+                    ClaimStatusId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CurrentStatus = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Status", x => x.StatusID);
+                    table.PrimaryKey("PK_Status", x => x.ClaimStatusId);
                 });
 
             migrationBuilder.CreateTable(
