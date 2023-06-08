@@ -32,7 +32,13 @@ namespace SkeppOHoj.Repositories
 
         public async Task<Insurance> GetInsuranceAsync(int insuranceId)
         {
-            var insurance = await context.Insurance.FirstOrDefaultAsync(x => x.InsuranceId == insuranceId);
+            var insurance = await 
+                context.Insurance
+                    .Where(x => x.InsuranceId == insuranceId)
+                    .Include(x => x.User)
+                    .Include(x => x.InsuranceType)
+                    .FirstOrDefaultAsync();
+
             return insurance;
         }
 
