@@ -33,6 +33,6 @@ namespace SkeppOHoj.Data
 
         public DbSet<SkeppOHoj.Models.InsuranceType> InsuranceType { get; set; } = default!;
 
-        public DbSet<SkeppOHoj.Models.ClaimStatus> Status { get; set; } = default!;
+        public DbSet<SkeppOHoj.Models.ClaimStatus> ClaimStatus { get; set; } = default!;
     }
 }
