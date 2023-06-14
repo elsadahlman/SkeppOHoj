@@ -29,7 +29,7 @@ namespace SkeppOHoj.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ClaimStatus>>> GetClaimStatus()
         {
-            var status = await _claimStatusRepository.GetClaimStatussAsync();
+            var status = await _claimStatusRepository.GetClaimStatusAsync();
             return Ok(status);
 
         }

@@ -13,7 +13,7 @@ namespace SkeppOHoj.Repositories
     public interface IClaimStatusRepository
     {
         Task<ClaimStatus> GetClaimStatusAsync(int ClaimStatusId);
-        Task<List<ClaimStatus>> GetClaimStatussAsync();
+        Task<List<ClaimStatus>> GetClaimStatusAsync();
         Task<ClaimStatus> DeleteClaimStatusAsync(int ClaimStatusId);
         Task<ClaimStatus> AddClaimStatusAsync(ClaimStatusCreationDto dto);
     }
@@ -36,10 +36,10 @@ namespace SkeppOHoj.Repositories
             return status;
         }
 
-        public async Task<List<ClaimStatus>> GetClaimStatussAsync()
+        public async Task<List<ClaimStatus>> GetClaimstatusAsync()
         {
-            var statuss = await context.ClaimStatus.ToListAsync();
-            return statuss;
+            var status = await context.ClaimStatus.ToListAsync();
+            return status;
         }
 
         public async Task<ClaimStatus> DeleteClaimStatusAsync(int ClaimStatusId)
@@ -64,5 +64,9 @@ namespace SkeppOHoj.Repositories
             return addedstatus.Entity;
         }
 
+        public Task<List<ClaimStatus>> GetClaimStatusAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
